@@ -1,0 +1,2 @@
+# yobascripExam
+exam for js
