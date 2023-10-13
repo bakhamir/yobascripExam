@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <title>adieu</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #ffffff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        .book-list {
+            margin-top: 20px;
+        }
+
+            .book:hover {
+                background-color: #eaeaea;
+            }
+
+        .add-book-btn {
+            display: block;
+            margin: 20px auto;
+            padding: 10px 20px;
+            background-color: #4caf50;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.4);
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 10% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+            .close:hover,
+            .close:focus {
+                color: black;
+                text-decoration: none;
+                cursor: pointer;
+            }
+
+        .buy-form {
+            text-align: left;
+        }
+
+        .buy-btn {
+            background-color: #4caf50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin-top: 10px;
+            cursor: pointer;
+        }
+
+            .buy-btn:hover 
+            {
+                background-color: #45a049;
+            }
+        .book {
+            display: flex;
+            flex-direction:column;
+            padding: 10px;
+            border: 1px solid #ccc;
+            margin-bottom: 10px;
+            cursor: pointer;
+            background-color: #f9f9f9;
+            max-width: 396px;
+            max-height: 800px;
+            text-align:center;
+        }
+
+            .book img {
+                padding: 10px;
+                max-width: 386px; 
+                max-height: 1000px;
+            }
+    </style>
+</head>       
+<body>
+    <div class="container">
+        <h1>Добро пожаловать в магазин книг</h1>
+        <h2>Нажмите на книгу чтобы ее купить</h2>
+        <h3>Добавьте книгу в соответствие с формой</h3>
+        <div id="book-list" class="book-list">
+
+            <div class='book'><img src="img/jsbook1.jpg" ><span class='book-title'>Learn JS</span></div>
+            <div class='book'><img src='img/jsbook2.jpg' ><span class='book-title'>Java Script</span></div>
+            <div class='book'><img src='img/jsbook3.jpg' ><span class='book-title'>Study JavaScript</span></div>
+        </div>
+        <label for="book-title">Название книги:</label>
+        <input type="text" id="book-title" required><br><br>
+        <label for="book-image">Обложка книги:</label>
+        <input type="file" id="book-image" accept="image/*"><br><br>
+        <button id="add-book-btn" class="add-book-btn">Добавить книгу</button>
+    </div>
+
+    <div id="buy-modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Форма покупки книги</h2>
+            <form id="buy-form" class="buy-form">
+                <label for="name">Имя:</label>
+                <input type="text" id="name" name="name" required><br><br>
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" required><br><br>
+                <button type="submit" class="buy-btn">Купить</button>
+            </form>
+        </div>
+    </div>
+
+
+    <script>
+
+        function showModal() {
+            $("#buy-modal").css("display", "block");
+        }
+
+
+        function closeModal() {
+            $("#buy-modal").css("display", "none");
+        }
+
+
+        $("#add-book-btn").click(function () {
+
+            const title = $("#book-title").val();
+            const image = $("#book-image")[0].files[0];
+
+
+            if (title && image) {
+
+                const reader = new FileReader();
+                reader.onload = function (event) {
+                    const imageUrl = event.target.result;
+                    $("#book-list").append(`<div class='book'><img src='${imageUrl}' alt='${title}'><span class='book-title'>${title}</span></div>`);
+                };
+                reader.readAsDataURL(image);
+
+
+                $("#book-title").val("");
+                $("#book-image").val("");
+            } else {
+                alert("Введите название книги и выберите изображение.");
+            }
+        });
+
+        $("#book-list").on("click", ".book", function () {
+            showModal();
+        });
+
+
+        $(".close").click(function () {
+            closeModal();
+        });
+
+
+        $(window).click(function (event) {
+            if (event.target == $("#buy-modal")[0]) {
+                closeModal();
+            }
+        });
+
+
+        $("#buy-form").submit(function (event) {
+            event.preventDefault();
+
+            const email = $("#email").val();
+            const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (emailPattern.test(email)) {
+                alert("Книга успешно куплена!");
+                closeModal();
+            } else {
+                alert("Введите корректный email адрес.");
+            }
+        });
+
+    </script>
+
+</body>
+</html>
