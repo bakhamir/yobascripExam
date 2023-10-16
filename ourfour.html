@@ -12,7 +12,7 @@
 .movie{display:flex;align-items: center;width:20%;height:15%;}
 .movie > img{width: 100%;height: 100%;}
 .movie-title{position: absolute;color: white;font-weight: bolder;background-color: black;}
-.formmovie{background-color: yellow;display: flex;flex-direction: column;align-items: center;display: none;}
+#formmovie{background-color: yellow;display: flex;flex-direction: column;align-items: center;display: none;}
 </style>
 </head>       
 <body>  
@@ -37,13 +37,13 @@
 <p id = "moviedesc">s</p>
 <p id = "movierate">s</p>
 <p id = "movieyear">s</p>
-
 </div>
 </div>
 
 <script>
     
-    $("#keywordbutton").click( function(){
+    $("#keywordbutton").click(function ()
+    {
         keyworduser = $("#keyword").val()
 fetch('https://kinopoiskapiunofficial.tech/api/v2.1/films/search-by-keyword?keyword=' + keyworduser, {
     method: 'GET',
@@ -65,14 +65,13 @@ fetch('https://kinopoiskapiunofficial.tech/api/v2.1/films/search-by-keyword?keyw
     .catch(err => console.log(err))
 
 })
-        $(".movie").click(function(){
-            $("#formmovie").display = "flex"
-        })
+
 $("#clearbutton").click( function(){
     $(".movie").remove()
 })
 
-$("#topbutton").click(function(){
+    $("#topbutton").click(function ()
+    {
     fetch('https://kinopoiskapiunofficial.tech/api/v2.2/films/collections', {
     method: 'GET',
     headers: {
@@ -86,14 +85,16 @@ $("#topbutton").click(function(){
         {
             $(".topmovies").append(`<div class='movie'><img src='${json.items[i].posterUrl} class = "movieimage"'><span class='movie-title'>${json.items[i].nameRu}</span></div>`);
         }
-        $(".movie").click(function(){
-        console.log(json)
     })
-    .catch(err => console.log(err))
-})
+            .catch(err => console.log(err))
+    }
+    )
+    $(".cont").on("click", ".movie", function () {
+        $("#formmovie").show();
+    });
 
 
-})
+
 </script>
 
 </body>
