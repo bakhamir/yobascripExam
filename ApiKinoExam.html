@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>adieu</title> 
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<style>
+.cont{
+    width:1000px;
+    margin: 0 auto;
+    font: italic;
+    background-color: indigo;
+}
+#movielist
+{
+    display: flex;
+    justify-content: space-evenly;
+    background-color: aliceblue;
+}
+#personlist{  
+    display: flex;
+    justify-content: space-evenly;
+    background-color: aliceblue;
+}
+.topmovies
+{
+    display: flex;
+    justify-content: space-evenly;
+    background-color: yellow;
+}
+.movie
+{
+    display:flex;
+    align-items: center;
+    width:20%;
+    height:15%;
+}
+.person
+{
+    display:flex;
+    align-items: center;
+    width:20%;
+    height:15%;
+}
+.movie > img
+{
+    width: 100%;
+    height: 100%;
+}
+.person > img
+{
+    width: 100%;
+    height: 100%;
+}
+
+.movie-title{
+    position: absolute;
+    color: white;
+    font-weight: bolder;
+    background-color: black;
+}
+.person-title{
+    position: absolute;
+    color: white;
+    font-weight: bolder;
+    background-color: black;
+}
+#formmovie{
+    background-color: yellow;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    display: none;
+    padding-left: 160px;
+    font-size: larger;
+}
+.desc{position: absolute;display: none;}
+.rate{position: absolute;display: none;}
+.year{position: absolute;display: none;}
+</style>
+</head>       
+<body>  
+<div class = "cont">
+<h1>Добро пожаловать на поиск кино</h1>
+<h2>Поисковик по ключевым словам</h2>
+<input type = "text" id = "keyword">
+<input type = "submit" id = "keywordbutton">
+<div id = "movielist">
+<h4>Результаты поиска</h4>
+</div>
+<input type = "submit" id = "clearbutton" value = "нажмите для очистки списка">
+<div id = "formmovie">
+    <p id = "moviedesc">s</p>
+    <p id = "movierate">s</p>
+    <p id = "movieyear">s</p>
+    </div>
+<h1>Топ популярных фильмов</h1>
+<input type = "submit" id = "topbutton" value = "нажмите для получения топа популярных фильмов">
+<div class = "topmovies">
+</div>
+<h1>Поиск людей по ключевым словам</h1>
+<input type = "text" id = "keywordPerson">
+<input type = "submit" id = "keywordbuttonPerson">
+<div id = "personlist">
+    <h4>Результаты поиска</h4>
+</div>
+</div>
+
+<script>
+    
+    $("#keywordbutton").click(function ()
+    {
+        keyworduser = $("#keyword").val()
+fetch('https://kinopoiskapiunofficial.tech/api/v2.1/films/search-by-keyword?keyword=' + keyworduser, {
+    method: 'GET',
+    headers: {
+        'X-API-KEY': 'ea86fd9d-62e1-4ca2-b282-cba53de003f8',
+        'Content-Type': 'application/json',
+    }
+})
+    .then(res => res.json())
+    .then(json => {
+        for(var i = 0;i<6;i++)
+        {
+            $("#movielist").append(
+                `<div class='movie' id = "${i}">
+                    <img src='${json.films[i].posterUrl} class = "movieimage"'>
+                    <span class='movie-title'>
+                        ${json.films[i].nameRu}</span>
+                        <span class = "desc">${json.films[i].description}</span>
+                        <span class = "rate">${json.films[i].rating}</span>
+                        <span class = "year">${json.films[i].year}</span>
+                </div>
+            `);
+        
+        }
+     
+    console.log(json)
+    
+    })
+    .catch(err => console.log(err))
+
+})
+
+$("#clearbutton").click( function(){
+    $(".movie").remove()
+})
+
+    $("#topbutton").click(function ()
+    {
+    fetch('https://kinopoiskapiunofficial.tech/api/v2.2/films/collections', {
+    method: 'GET',
+    headers: {
+        'X-API-KEY': 'ea86fd9d-62e1-4ca2-b282-cba53de003f8',
+        'Content-Type': 'application/json',
+    },
+})
+    .then(res => res.json())
+    .then(json => {
+        for(var i = 0;i<6;i++)
+        {
+            console.log(json)
+            $(".topmovies").append(`<div class='movie'><img src='${json.items[i].posterUrl} class = "movieimage"'><span class='movie-title'>${json.items[i].nameRu}</span><span class = "desc">${json.items[i].nameOriginal}</span>
+                        <span class = "rate">${json.items[i].ratingKinopoisk}</span>
+                        <span class = "year">${json.items[i].year}</span></div>`);
+        }
+    })
+            // .catch(err => console.log(err))
+    }
+    )
+    $(".cont").on("click", ".movie", function (e) {
+        console.log(e)
+        $("#formmovie").show();
+        $("#moviedesc").text($(e.currentTarget).children('.desc').text());
+        $("#movierate").text($(e.currentTarget).children('.rate').text());
+        $("#movieyear").text($(e.currentTarget).children('.year').text());
+        
+        setTimeout(hideList,15000,"#formmovie");
+        function hideList(movie){
+            $(movie).hide();
+        }
+    });
+    $("#keywordbuttonPerson").click(function ()
+    {
+        keyworduser = $("#keywordPerson").val()
+fetch('https://kinopoiskapiunofficial.tech/api/v2.1/films/search-by-name?name=' + keyworduser, {
+    method: 'GET',
+    headers: {
+        'X-API-KEY': 'ea86fd9d-62e1-4ca2-b282-cba53de003f8',
+        'Content-Type': 'application/json',
+    }
+})
+    .then(res => res.json())
+    .then(json => {
+        for(var i = 0;i<6;i++)
+        {
+            $("#movielist").append(
+                `<div class='person' id = "${i}">
+                    <img src='${json.films[i].posterUrl} class = "movieimage"'>
+                    <span class='movie-title'>
+                        ${json.films[i].nameRu}</span>
+                        <span class = "desc">${json.films[i].description}</span>
+                        <span class = "rate">${json.films[i].rating}</span>
+                        <span class = "year">${json.films[i].year}</span>
+                </div>
+            `);
+        
+        }
+     
+    console.log(json)
+    
+    })
+    .catch(err => console.log(err))
+
+})
+
+</script>
+
+</body>
+</html>
