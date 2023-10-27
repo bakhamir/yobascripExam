@@ -6,28 +6,33 @@
 <title>adieu</title> 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <style>
+    body {
+        background-image: url("img/muon_bg.jpg");
+        font: italic;
+        color:orangered;
+    }
+
 .cont{
     width:1000px;
     margin: 0 auto;
-    font: italic;
-    background-color: indigo;
+
+    background-image:url("img/muon_posts.jpg");
 }
 #movielist
 {
     display: flex;
     justify-content: space-evenly;
-    background-color: aliceblue;
+
 }
 #personlist{  
     display: flex;
     justify-content: space-evenly;
-    background-color: aliceblue;
+
 }
 .topmovies
 {
     display: flex;
     justify-content: space-evenly;
-    background-color: yellow;
 }
 .movie
 {
@@ -67,7 +72,6 @@
     background-color: black;
 }
 #formmovie{
-    background-color: yellow;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -75,37 +79,62 @@
     padding-left: 160px;
     font-size: larger;
 }
+.clearbutton{
+    margin-top:100px;
+}
 .desc{position: absolute;display: none;}
 .rate{position: absolute;display: none;}
 .year{position: absolute;display: none;}
+#keyword-search{display:none}
+#top-movies{display:none}
+#person-search{display:none}
 </style>
 </head>       
 <body>  
-<div class = "cont">
-<h1>Добро пожаловать на поиск кино</h1>
-<h2>Поисковик по ключевым словам</h2>
-<input type = "text" id = "keyword">
-<input type = "submit" id = "keywordbutton">
-<div id = "movielist">
-<h4>Результаты поиска</h4>
-</div>
-<input type = "submit" id = "clearbutton" value = "нажмите для очистки списков">
-<div id = "formmovie">
-    <p id = "moviedesc">s</p>
-    <p id = "movierate">s</p>
-    <p id = "movieyear">s</p>
+    <div class="cont">
+        <div id="header">
+            <h1>Добро пожаловать на поиск кино</h1>
+            <h2>мы вам рады, снова</h2>
+            <div id="switcher-block">
+                <button id="firstpage">1</button>
+                <button id="secondpage">2</button>
+                <button id="thirdpage">3</button>
+            </div>
+        </div>
+
+        <div id="keyword-search">
+            <h2>Поисковик по ключевым словам</h2>
+            <input type="text" id="keyword">
+            <input type="submit" id="keywordbutton">
+            <div id="movielist">
+
+            </div>
+            <input type="submit" class="clearbutton" value="нажмите для очистки списков">
+        </div>
+
+        <div id="top-movies">
+            <h1>Топ популярных фильмов</h1>
+            <input type="submit" id="topbutton" value="нажмите для получения топа популярных фильмов">
+            <div class="topmovies">
+
+            </div>
+            <input type="submit" class="clearbutton" value="нажмите для очистки списков">
+        </div>
+        <div id="person-search">
+            <h1>Поиск людей по ключевым словам</h1>
+            <input type="text" id="keywordPerson">
+            <input type="submit" id="keywordbuttonPerson">
+            <div id="personlist">
+
+            </div>
+            <input type="submit" class="clearbutton" value="нажмите для очистки списков">
+        </div>
+        <div id="formmovie">
+            <p id="moviedesc">s</p>
+            <p id="movierate">s</p>
+            <p id="movieyear">s</p>
+        </div>
     </div>
-<h1>Топ популярных фильмов</h1>
-<input type = "submit" id = "topbutton" value = "нажмите для получения топа популярных фильмов">
-<div class = "topmovies">
-</div>
-<h1>Поиск людей по ключевым словам</h1>
-<input type = "text" id = "keywordPerson">
-<input type = "submit" id = "keywordbuttonPerson">
-<div id = "personlist">
-    <h4>Результаты поиска</h4>
-</div>
-</div>
 
 <script>
     
@@ -143,7 +172,7 @@ fetch('https://kinopoiskapiunofficial.tech/api/v2.1/films/search-by-keyword?keyw
 
 })
 
-$("#clearbutton").click( function(){
+$(".clearbutton").on("click", function(){
     $(".movie").remove()
       $(".person").remove()
 })
@@ -176,36 +205,53 @@ $("#clearbutton").click( function(){
         $("#moviedesc").text($(e.currentTarget).children('.desc').text());
         $("#movierate").text($(e.currentTarget).children('.rate').text());
         $("#movieyear").text($(e.currentTarget).children('.year').text());
-        
-        setTimeout(hideList,15000,"#formmovie");
-        function hideList(movie){
-            $(movie).hide();
-        }
-    });
-    $("#keywordbuttonPerson").click(function ()
-    {
-        keyworduser = $("#keywordPerson").val()
-fetch('https://kinopoiskapiunofficial.tech/api/v1/persons?name=' + keyworduser, {
-    method: 'GET',
-    headers: {
-        'X-API-KEY': 'ea86fd9d-62e1-4ca2-b282-cba53de003f8',
-        'Content-Type': 'application/json',
-    }
-})
-    .then(res => res.json())
-    .then(json => {
-        for(var i = 0;i<6;i++)
-        {
-            $("#personlist").append(`<div class='person'><img src='${json.items[i].posterUrl} class = "movieimage"'><span class='person-title'> ${json.items[i].nameRu}</span></div>
-            `);
-        }
-     
-    console.log(json)
-    
-    })
-    .catch(err => console.log(err))
 
-})
+        $("#formmovie").click(function () {
+            $("#formmovie").hide();
+        })
+        //setTimeout(hideList,15000,"#formmovie");
+        //function hideList(movie){
+        //    $(movie).hide();
+        //}
+    });
+    $("#keywordbuttonPerson").click(function () {
+        keyworduser = $("#keywordPerson").val()
+        fetch('https://kinopoiskapiunofficial.tech/api/v1/persons?name=' + keyworduser, {
+            method: 'GET',
+            headers: {
+                'X-API-KEY': 'ea86fd9d-62e1-4ca2-b282-cba53de003f8',
+                'Content-Type': 'application/json',
+            }
+        })
+            .then(res => res.json())
+            .then(json => {
+                for (var i = 0; i < 6; i++) {
+                    $("#personlist").append(`<div class='person'><img src='${json.items[i].posterUrl} class = "movieimage"'><span class='person-title'> ${json.items[i].nameRu}</span></div>
+            `);
+                }
+
+                console.log(json)
+
+            })
+            .catch(err => console.log(err))
+
+    })
+    $("#firstpage").click(function () {
+        $("#keyword-search").show()
+        $("#top-movies").hide()
+        $("#person-search").hide()
+    })
+    $("#secondpage").click(function () {
+        $("#keyword-search").hide()
+        $("#top-movies").show()
+        $("#person-search").hide()
+    })
+    $("#thirdpage").click(function () {
+        $("#keyword-search").hide()
+        $("#top-movies").hide()
+        $("#person-search").show()
+    })
+
 
 </script>
 
