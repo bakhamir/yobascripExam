@@ -89,7 +89,7 @@
 <div id = "movielist">
 <h4>Результаты поиска</h4>
 </div>
-<input type = "submit" id = "clearbutton" value = "нажмите для очистки списка">
+<input type = "submit" id = "clearbutton" value = "нажмите для очистки списков">
 <div id = "formmovie">
     <p id = "moviedesc">s</p>
     <p id = "movierate">s</p>
@@ -145,6 +145,7 @@ fetch('https://kinopoiskapiunofficial.tech/api/v2.1/films/search-by-keyword?keyw
 
 $("#clearbutton").click( function(){
     $(".movie").remove()
+      $(".person").remove()
 })
 
     $("#topbutton").click(function ()
@@ -184,7 +185,7 @@ $("#clearbutton").click( function(){
     $("#keywordbuttonPerson").click(function ()
     {
         keyworduser = $("#keywordPerson").val()
-fetch('https://kinopoiskapiunofficial.tech/api/v2.1/films/search-by-name?name=' + keyworduser, {
+fetch('https://kinopoiskapiunofficial.tech/api/v1/persons?name=' + keyworduser, {
     method: 'GET',
     headers: {
         'X-API-KEY': 'ea86fd9d-62e1-4ca2-b282-cba53de003f8',
@@ -195,17 +196,8 @@ fetch('https://kinopoiskapiunofficial.tech/api/v2.1/films/search-by-name?name=' 
     .then(json => {
         for(var i = 0;i<6;i++)
         {
-            $("#movielist").append(
-                `<div class='person' id = "${i}">
-                    <img src='${json.films[i].posterUrl} class = "movieimage"'>
-                    <span class='movie-title'>
-                        ${json.films[i].nameRu}</span>
-                        <span class = "desc">${json.films[i].description}</span>
-                        <span class = "rate">${json.films[i].rating}</span>
-                        <span class = "year">${json.films[i].year}</span>
-                </div>
+            $("#personlist").append(`<div class='person'><img src='${json.items[i].posterUrl} class = "movieimage"'><span class='person-title'> ${json.items[i].nameRu}</span></div>
             `);
-        
         }
      
     console.log(json)
