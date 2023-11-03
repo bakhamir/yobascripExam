@@ -1,0 +1,92 @@
+
+span{color:green;font-size:48px;font-style:courier;}
+
+
+.header{width:1000px;margin: 0px auto;}
+
+.header ul {list-style:none;}
+
+.header ul.sub-menu li:before{
+content:"CONTENT ";}
+
+
+.float{float:left;width:33.33%;text-align:center;}
+
+.clear{clear:both;}
+
+.cont{width:1000px;margin: 0px auto;}
+
+.float img{height: 85px;}
+
+.sub-menu{display:none;}
+ul.navig > li:hover > .sub-menu{display:block;}
+ul.navig > li{float:left;margin:10px;}
+ul.navig{float:right;}
+.logo{float:left;}
+.center {
+    float: left;
+    width: 50%;
+    padding: 50px 0px;
+}
+
+.img-sl {
+    float: right;
+    width: 50%;
+}
+
+img.hill{width:100%;}
+
+ .slider{background:url(img/slider-bg.png);background-repeat:repeat-x;background-position:left bottom;
+ margin-bottom:60px;} 
+
+.img-sl{position:relative;}
+
+img.house{position:absolute;top:57%;left:30%;width:auto;}
+img.sun{position:absolute;top:45%;left:35%;width:20%;}
+img.birds1{position:absolute;top:53%;left:0%;width:30%;}
+img.birds2{position:absolute;top:40%;left:104%;width:auto;}
+
+.txt-M, .but-M {float: left;}
+.txt-M{width: 70%;}
+.but-M {border: 1px #0099ae solid;
+    text-align: center;
+    width: 20%;
+    padding: 10px 0px;
+    border-radius: 11px;
+    text-transform: uppercase;
+    font-weight: bold;
+    color: #0099ae;
+	margin-top:30px;}
+.moped > .cont img{float:right;position:absolute;z-index:2;}
+
+.moped{background:url(img/tour-bg.png);background-repeat:repeat-x;height:200px;margin-bottom:20px;} 
+ 
+.left{float:left;width:50%;}
+
+.right{float:right;width:50%;}
+
+.centerer{text-align:center;}
+
+.clients {width:100%;}
+.clients img{margin-right:30px;}
+
+.robot {display:none;}
+.frog{display:none;}
+.karatist{display:none;}
+.text{display:none;}
+
+@media(max-width: 1200px) {.cont {width: 95%;}}
+@media(max-width: 1000px) {.block {width: 50%;} .block.block-3 {width: 100%;}}
+@media(max-width: 768px){
+.sl-img > .cont > .float{width: 100%;} 
+.slider > .cont > .center, .sl-img{width: 100%;}
+.frog{display:block;width:100%;text-align:center;}
+.karatist{display:block;width:100%;text-align:center;}
+.robot{display:block;width:100%;text-align:center;}
+.stroka > .left img{display:none;}
+.stroka > .right img{display:none;}
+.normtext{display:none;}
+.text{display:block;width:100%;text-align:center;}
+}
+
+}
