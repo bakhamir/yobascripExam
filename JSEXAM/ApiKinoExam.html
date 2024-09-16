@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>adieu</title> 
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<style>
+    body {
+        background-image: url("img/muon_bg.jpg");
+        font: italic;
+        color:orangered;
+    }
+
+    canvas{
+        border:1px solid black;
+    }
+.cont{
+    width:1000px;
+    margin: 0 auto;
+
+    background-image:url("img/muon_posts.jpg");
+}
+#movielist
+{
+    display: flex;
+    justify-content: space-evenly;
+
+}
+#personlist{  
+    display: flex;
+    justify-content: space-evenly;
+
+}
+.topmovies
+{
+    display: flex;
+    justify-content: space-evenly;
+}
+.movie
+{
+    display:flex;
+    align-items: center;
+    width:20%;
+    height:15%;
+}
+.person
+{
+    display:flex;
+    align-items: center;
+    width:20%;
+    height:15%;
+}
+.movie > img
+{
+    width: 100%;
+    height: 100%;
+}
+.person > img
+{
+    width: 100%;
+    height: 100%;
+}
+
+.movie-title{
+    position: absolute;
+    color: white;
+    font-weight: bolder;
+    background-color: black;
+}
+.person-title{
+    position: absolute;
+    color: white;
+    font-weight: bolder;
+    background-color: black;
+}
+#formmovie{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    display: none;
+    padding-left: 160px;
+    font-size: larger;
+}
+.clearbutton{
+    margin-top:100px;
+}
+.desc{position: absolute;display: none;}
+.rate{position: absolute;display: none;}
+.year{position: absolute;display: none;}
+#keyword-search{display:none}
+#top-movies{display:none}
+#person-search{display:none}
+#snake{display: none;    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);}
+</style>
+</head>       
+<body>  
+    <div class="cont">
+        <div id="header">
+            <h1>Добро пожаловать на поиск кино</h1>
+            <h2>мы вам рады, снова</h2>
+            <div id="switcher-block">
+                <button id="firstpage">1</button>
+                <button id="secondpage">2</button>
+                <button id="thirdpage">3</button>
+                <button id="gamepage">стало скучно?</button>
+            </div>
+        </div>
+
+        <div id="keyword-search">
+            <h2>Поисковик по ключевым словам</h2>
+            <input type="text" id="keyword">
+            <input type="submit" id="keywordbutton">
+            <div id="movielist">
+
+            </div>
+            <input type="submit" class="clearbutton" value="нажмите для очистки списков">
+        </div>
+
+        <div id="top-movies">
+            <h1>Топ популярных фильмов</h1>
+            <input type="submit" id="topbutton" value="нажмите для получения топа популярных фильмов">
+            <div class="topmovies">
+
+            </div>
+            <input type="submit" class="clearbutton" value="нажмите для очистки списков">
+        </div>
+
+        <div id="person-search">
+            <h1>Поиск людей по ключевым словам</h1>
+            <input type="text" id="keywordPerson">
+            <input type="submit" id="keywordbuttonPerson">
+            <div id="personlist">
+
+            </div>
+            <input type="submit" class="clearbutton" value="нажмите для очистки списков">
+        </div>
+
+        <div id = "snake">
+            <canvas width="400" height ="400" id = "snakeCanvas">
+                <script src = "snake.js"></script>
+            </canvas>
+        </div>
+
+        <div id="formmovie">
+            <p id="moviedesc">s</p>
+            <p id="movierate">s</p>
+            <p id="movieyear">s</p>
+        </div>
+    </div>
+
+<script>
+    
+    $("#keywordbutton").click(function ()
+    {
+        keyworduser = $("#keyword").val()
+fetch('https://kinopoiskapiunofficial.tech/api/v2.1/films/search-by-keyword?keyword=' + keyworduser, {
+    method: 'GET',
+    headers: {
+        'X-API-KEY': 'ea86fd9d-62e1-4ca2-b282-cba53de003f8',
+        'Content-Type': 'application/json',
+    }
+})
+    .then(res => res.json())
+    .then(json => {
+        for(var i = 0;i<6;i++)
+        {
+            $("#movielist").append(
+                `<div class='movie' id = "${i}">
+                    <img src='${json.films[i].posterUrl} class = "movieimage"'>
+                    <span class='movie-title'>
+                        ${json.films[i].nameRu}</span>
+                        <span class = "desc">${json.films[i].description}</span>
+                        <span class = "rate">${json.films[i].rating}</span>
+                        <span class = "year">${json.films[i].year}</span>
+                </div>
+            `);
+        
+        }
+     
+    console.log(json)
+    
+    })
+    .catch(err => console.log(err))
+
+})
+
+$(".clearbutton").on("click", function(){
+    $(".movie").remove()
+      $(".person").remove()
+})
+
+    $("#topbutton").click(function ()
+    {
+    fetch('https://kinopoiskapiunofficial.tech/api/v2.2/films/collections', {
+    method: 'GET',
+    headers: {
+        'X-API-KEY': 'ea86fd9d-62e1-4ca2-b282-cba53de003f8',
+        'Content-Type': 'application/json',
+    },
+})
+    .then(res => res.json())
+    .then(json => {
+        for(var i = 0;i<6;i++)
+        {
+            console.log(json)
+            $(".topmovies").append(`<div class='movie'><img src='${json.items[i].posterUrl} class = "movieimage"'><span class='movie-title'>${json.items[i].nameRu}</span><span class = "desc">${json.items[i].nameOriginal}</span>
+                        <span class = "rate">${json.items[i].ratingKinopoisk}</span>
+                        <span class = "year">${json.items[i].year}</span></div>`);
+        }
+    })
+            // .catch(err => console.log(err))
+    }
+    )
+    $(".cont").on("click", ".movie", function (e) {
+        console.log(e)
+        $("#formmovie").show();
+        $("#moviedesc").text($(e.currentTarget).children('.desc').text());
+        $("#movierate").text($(e.currentTarget).children('.rate').text());
+        $("#movieyear").text($(e.currentTarget).children('.year').text());
+
+        $("#formmovie").click(function () {
+            $("#formmovie").hide();
+        })
+        //setTimeout(hideList,15000,"#formmovie");
+        //function hideList(movie){
+        //    $(movie).hide();
+        //}
+    });
+    $("#keywordbuttonPerson").click(function () {
+        keyworduser = $("#keywordPerson").val()
+        fetch('https://kinopoiskapiunofficial.tech/api/v1/persons?name=' + keyworduser, {
+            method: 'GET',
+            headers: {
+                'X-API-KEY': 'ea86fd9d-62e1-4ca2-b282-cba53de003f8',
+                'Content-Type': 'application/json',
+            }
+        })
+            .then(res => res.json())
+            .then(json => {
+                for (var i = 0; i < 6; i++) {
+                    $("#personlist").append(`<div class='person'><img src='${json.items[i].posterUrl} class = "movieimage"'><span class='person-title'> ${json.items[i].nameRu}</span></div>
+            `);
+                }
+
+                console.log(json)
+
+            })
+            .catch(err => console.log(err))
+
+    })
+    $("#firstpage").click(function () {
+        $("#keyword-search").show()
+        $("#top-movies").hide()
+        $("#person-search").hide()
+        $("#snake").hide()
+    })
+    $("#secondpage").click(function () {
+        $("#keyword-search").hide()
+        $("#top-movies").show()
+        $("#person-search").hide()
+        $("#snake").hide()
+    })
+    $("#thirdpage").click(function () {
+        $("#keyword-search").hide()
+        $("#top-movies").hide()
+        $("#person-search").show()
+        $("#snake").hide()
+    })
+    $("#gamepage").click(function () {
+        $("#keyword-search").hide()
+        $("#top-movies").hide()
+        $("#person-search").hide()
+        $("#snake").show()
+    })
+
+
+</script>
+
+</body>
+</html>
